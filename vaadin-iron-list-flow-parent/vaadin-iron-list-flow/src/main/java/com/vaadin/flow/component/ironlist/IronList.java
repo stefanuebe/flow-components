@@ -73,9 +73,11 @@ import elemental.json.JsonValue;
  *      "https://www.webcomponents.org/element/PolymerElements/iron-list">iron-list
  *      webcomponent documentation</a>
  */
-@Tag("iron-list")
-@NpmPackage(value = "@polymer/iron-list", version = "3.1.0")
-@JsModule("@polymer/iron-list/iron-list.js")
+@Tag("vaadin-virtual-list")
+// @NpmPackage(value = "@vaadin/vaadin-template-renderer", version = "21.0.0-alpha1")
+@JsModule("@vaadin/vaadin-template-renderer/vaadin-template-renderer.js")
+// @NpmPackage(value = "@vaadin/vaadin-virtual-list", version = "21.0.0-alpha1")
+@JsModule("@vaadin/vaadin-virtual-list/vaadin-virtual-list.js")
 @JsModule("./flow-component-renderer.js")
 @JsModule("./ironListConnector.js")
 @JsModule("./ironListStyles.js")

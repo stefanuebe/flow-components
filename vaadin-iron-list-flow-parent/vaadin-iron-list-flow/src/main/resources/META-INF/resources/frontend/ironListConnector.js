@@ -36,6 +36,11 @@ window.Vaadin.Flow.ironListConnector = {
       }
     };
 
+    // Testing
+    setTimeout(() => {
+      list.$server.setRequestedRange(0, 30);
+    }, 3000)
+
     let requestDebounce;
     const scheduleUpdateRequest = function() {
       requestDebounce = Debouncer.debounce(
@@ -91,8 +96,9 @@ window.Vaadin.Flow.ironListConnector = {
         const itemsIndex = index + i;
         list.items[itemsIndex] = items[i];
       }
+
       // Do a full render since dirty detection for splices is broken
-      list._render();
+      list.requestUpdate();
     };
 
     list.$connector.updateData = function(items) {
@@ -111,13 +117,15 @@ window.Vaadin.Flow.ironListConnector = {
         const newItem = mapByKey[oldItem.key];
         if (newItem) {
           list.items[i] = newItem;
-          list.notifyPath("items." + i);
+          // list.notifyPath("items." + i);
           leftToUpdate--;
           if (leftToUpdate == 0) {
             break;
           }
         }
       }
+
+      list.requestUpdate();
     };
 
     list.$connector.clear = function(index, length) {
@@ -126,7 +134,8 @@ window.Vaadin.Flow.ironListConnector = {
         delete list.items[itemsIndex];
 
         // Most likely a no-op since the affected index isn't in view
-        list.notifyPath("items." + itemsIndex);
+        // list.notifyPath("items." + itemsIndex);
+        list.requestUpdate();
       }
     };
 
@@ -135,27 +144,30 @@ window.Vaadin.Flow.ironListConnector = {
       if (delta > 0) {
         list.items.length = newSize;
 
-        list.notifySplices("items", [
-          {
-            index: newSize - delta,
-            removed: [],
-            addedCount: delta,
-            object: list.items,
-            type: "splice"
-          }
-        ]);
+        list.requestUpdate();
+
+        // list.notifySplices("items", [
+        //   {
+        //     index: newSize - delta,
+        //     removed: [],
+        //     addedCount: delta,
+        //     object: list.items,
+        //     type: "splice"
+        //   }
+        // ]);
       } else if (delta < 0) {
         const removed = list.items.slice(newSize, list.items.length);
         list.items.splice(newSize);
-        list.notifySplices("items", [
-          {
-            index: newSize,
-            removed: removed,
-            addedCount: 0,
-            object: list.items,
-            type: "splice"
-          }
-        ]);
+        list.requestUpdate();
+        // list.notifySplices("items", [
+        //   {
+        //     index: newSize,
+        //     removed: removed,
+        //     addedCount: 0,
+        //     object: list.items,
+        //     type: "splice"
+        //   }
+        // ]);
       }
     };
 
